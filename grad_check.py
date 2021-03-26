@@ -17,13 +17,9 @@ def gradient_check(f, x):
     it = np.nditer(x, flags=['multi_index'], op_flags=['readwrite'])
     while not it.finished:
         ix = it.multi_index
-        numeric_gradient = None
-        grad: np.Array = None
-        ### modify x[ix] with h defined above to compute the numerical gradient.
-        ### if you change x, make sure to return it back to its original state for the next iteration.
-        ### YOUR CODE HERE:
-        raise NotImplementedError
-        ### END YOUR CODE
+        cost_p, _ = f(x[ix] + h)
+        cost_m, _ = f(x[ix] - h)
+        numeric_gradient = (cost_p - cost_m) / (2*h)
 
         # Compare gradients
         reldiff = abs(numeric_gradient - grad[ix]) / max(1, abs(numeric_gradient), abs(grad[ix]))
@@ -46,7 +42,7 @@ def sanity_check():
     print("Running sanity checks...")
     gradient_check(quad, np.array(123.456))      # scalar test
     gradient_check(quad, np.random.randn(3,))    # 1-D test
-    gradient_check(quad, np.random.randn(4,5))   # 2-D test
+    gradient_check(quad, np.random.randn(4, 5))   # 2-D test
     print()
 
 if __name__ == '__main__':
