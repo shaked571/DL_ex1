@@ -9,12 +9,9 @@ def softmax(x):
     x: a n-dim vector (numpy array)
     returns: an n-dim vector (numpy array) of softmax values
     """
-    # YOUR CODE HERE
-    # Your code should be fast, so use a vectorized implementation using numpy,
-    # don't use any loops.
-    # With a vectorized implementation, the code should be no more than 2 lines.
-    #
-    # For numeric stability, use the identify you proved in Ex 2 Q1.
+    x = x - x.max()  # numeric stability
+    dominator = np.sum(np.e**x)
+    x = np.exp(x) / dominator
     return x
     
 
@@ -23,9 +20,16 @@ def classifier_output(x, params):
     Return the output layer (class probabilities) 
     of a log-linear classifier with given params on input x.
     """
-    W,b = params
-    # YOUR CODE HERE.
-    return probs
+    W, b = params
+    try:
+        np.dot(np.array(x), W) + b
+    except ValueError as e:
+        print("Error-W")
+        print(W)
+        print("Error-b")
+        print(b)
+    return np.dot(np.array(x), W) + b
+
 
 def predict(x, params):
     """
@@ -37,6 +41,18 @@ def predict(x, params):
     b: vector
     """
     return np.argmax(classifier_output(x, params))
+
+
+def cross_entropy(y_tag, y):
+    """
+    We compute only the log of the y_tag in the index that y isn't 0.
+    Becuse we sum over all the indices y*np.log(y_tag). and y is 1-hot vector.
+    :param y_tag:
+    :param y:
+    :return:
+    """
+    return -np.log(y_tag[y])
+
 
 def loss_and_gradients(x, y, params):
     """
@@ -50,9 +66,15 @@ def loss_and_gradients(x, y, params):
     gW: matrix, gradients of W
     gb: vector, gradients of b
     """
-    W,b = params
-    # YOU CODE HERE
-    return loss,[gW,gb]
+    # we put the softmax here for the loss calc, because in prediction its redundant to calc the prob
+    y_tag = softmax(classifier_output(x, params))
+    loss = cross_entropy(y_tag, y)
+    y_ = np.zeros(len(y_tag))
+    y_[y] = 1
+    gW = (y_tag - y_) * np.array(x).reshape(-1, 1)
+
+    gb = y_tag - y_
+    return loss, [gW, gb]
 
 def create_classifier(in_dim, out_dim):
     """
@@ -61,7 +83,7 @@ def create_classifier(in_dim, out_dim):
     """
     W = np.zeros((in_dim, out_dim))
     b = np.zeros(out_dim)
-    return [W,b]
+    return [W, b]
 
 if __name__ == '__main__':
     # Sanity checks for softmax. If these fail, your softmax is definitely wrong.
@@ -78,28 +100,29 @@ if __name__ == '__main__':
     print(test3)
     assert np.amax(np.fabs(test3 - np.array([0.73105858, 0.26894142]))) <= 1e-6
 
+    test4 = softmax(np.array([1001, -1002]))
+    print(test4)
+    assert np.amax(np.fabs(test4 - np.array([1, 1.282e-800]))) <= 1e-6
+
 
     # Sanity checks. If these fail, your gradient calculation is definitely wrong.
     # If they pass, it is likely, but not certainly, correct.
     from grad_check import gradient_check
 
-    W,b = create_classifier(3,4)
+    W, b = create_classifier(3,4)
 
     def _loss_and_W_grad(W):
         global b
-        loss,grads = loss_and_gradients([1,2,3],0,[W,b])
-        return loss,grads[0]
+        loss, grads = loss_and_gradients([1,2,3], 0, [W,b])
+        return loss, grads[0]
 
     def _loss_and_b_grad(b):
         global W
-        loss,grads = loss_and_gradients([1,2,3],0,[W,b])
-        return loss,grads[1]
+        loss, grads = loss_and_gradients([1,2,3], 0, [W,b])
+        return loss, grads[1]
 
-    for _ in xrange(10):
-        W = np.random.randn(W.shape[0],W.shape[1])
+    for _ in range(10):
+        W = np.random.randn(W.shape[0], W.shape[1])
         b = np.random.randn(b.shape[0])
         gradient_check(_loss_and_b_grad, b)
         gradient_check(_loss_and_W_grad, W)
-
-
-    
