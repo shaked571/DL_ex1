@@ -69,12 +69,17 @@ def loss_and_gradients(x, y, params):
     # we put the softmax here for the loss calc, because in prediction its redundant to calc the prob
     y_tag = softmax(classifier_output(x, params))
     loss = cross_entropy(y_tag, y)
-    y_ = np.zeros(len(y_tag))
-    y_[y] = 1
+    y_ = create_1_hot_vec(y, y_tag)
     gW = (y_tag - y_) * np.array(x).reshape(-1, 1)
-
     gb = y_tag - y_
     return loss, [gW, gb]
+
+
+def create_1_hot_vec(y, y_tag):
+    y_ = np.zeros(len(y_tag))
+    y_[y] = 1
+    return y_
+
 
 def create_classifier(in_dim, out_dim):
     """
@@ -119,6 +124,7 @@ if __name__ == '__main__':
     def _loss_and_b_grad(b):
         global W
         loss, grads = loss_and_gradients([1,2,3], 0, [W,b])
+
         return loss, grads[1]
 
     for _ in range(10):
