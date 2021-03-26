@@ -16,12 +16,15 @@ def feats_to_vec(features):
 
 def accuracy_on_dataset(dataset, params):
     good, bad = 0, 0
+    W, b = params
     for label, features in dataset:
-        # YOUR CODE HERE
-        # Compute the accuracy (a scalar) of the current parameters
-        # on the dataset.
-        # accuracy is (correct_predictions / all_predictions)
-        pass
+        feature_vec = feats_to_vec(features)
+        pred = np.dot(feature_vec, W) + b
+        y_tag = pred.argmax()
+        if y_tag == L2I[label]:
+            good += 1
+        else:
+            bad += 1
     return good / (good + bad)
 
 def train_classifier(train_data, dev_data, num_iterations, learning_rate, params):
@@ -43,10 +46,8 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
             y = L2I[label]                    # convert the label to number if needed.
             loss, grads = ll.loss_and_gradients(x, y, params)
             cum_loss += loss
-            # YOUR CODE HERE
-
-            # update the parameters according to the gradients
-            # and the learning rate.
+            params[0] -= (learning_rate * grads[0])
+            params[1] -= (learning_rate * grads[1])
 
         train_loss = cum_loss / len(train_data)
         train_accuracy = accuracy_on_dataset(train_data, params)
