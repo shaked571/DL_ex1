@@ -1,6 +1,10 @@
 # This file provides code which you may or may not find helpful.
 # Use it if you want, or ignore it.
 import os
+
+import numpy as np
+
+
 def read_data(fname):
     data = []
     with open(fname) as f:
@@ -31,3 +35,19 @@ L2I = {l:i for i,l in enumerate(list(sorted(set([l for l,t in TRAIN]))))}
 # feature strings (bigrams) to IDs
 F2I = {f:i for i,f in enumerate(list(sorted(vocab)))}
 
+
+def cross_entropy(y_tag, y):
+    """
+    We compute only the log of the y_tag in the index that y isn't 0.
+    Becuse we sum over all the indices y*np.log(y_tag). and y is 1-hot vector.
+    :param y_tag:
+    :param y:
+    :return:
+    """
+    return -np.log(y_tag[y])
+
+
+def create_1_hot_vec(y, y_tag):
+    y_ = np.zeros(len(y_tag))
+    y_[y] = 1
+    return y_

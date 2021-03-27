@@ -1,5 +1,4 @@
 import numpy as np
-
 STUDENT={'name': 'YOUR NAME',
          'ID': 'YOUR ID NUMBER'}
 
@@ -51,5 +50,10 @@ def create_classifier(dims):
     second layer, and so on.
     """
     params = []
+    for d_in, d_out in zip(dims, dims[1:]):
+        M = np.zeros((d_in, d_out))
+        b = np.zeros(d_out)
+        layer = [M, b]
+        params.extend(layer)
     return params
 
