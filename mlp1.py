@@ -57,8 +57,8 @@ def loss_and_gradients(x, y, params):
     gU: matrix, gradients of U
     gb_tag: vector, gradients of b_tag
     """
-    y_tag = softmax(classifier_output(x, params))
     W, b, U, b_tag = params
+    y_tag = softmax(classifier_output(x, params))
 
     loss = cross_entropy(y_tag, y)
     y_ = create_1_hot_vec(y, y_tag)
