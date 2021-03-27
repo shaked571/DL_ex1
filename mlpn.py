@@ -2,12 +2,21 @@ import numpy as np
 STUDENT={'name': 'YOUR NAME',
          'ID': 'YOUR ID NUMBER'}
 
+
 def classifier_output(x, params):
-    # YOUR CODE HERE.
-    return probs
+    out = None
+    for M, b in zip(params[0::2], params[1::2]):
+        if out is None:
+            out = np.dot(np.array(x), M) + b
+        else:
+            out = np.tanh(out)
+            out = np.dot(out, M) + b
+    return out
+
 
 def predict(x, params):
     return np.argmax(classifier_output(x, params))
+
 
 def loss_and_gradients(x, y, params):
     """
@@ -27,7 +36,7 @@ def loss_and_gradients(x, y, params):
     you should not have gW2 and gb2.)
     """
     # YOU CODE HERE
-    return ...
+    return
 
 def create_classifier(dims):
     """
