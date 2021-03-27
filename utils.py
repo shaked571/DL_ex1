@@ -7,11 +7,22 @@ import numpy as np
 
 def read_data(fname):
     data = []
-    with open(fname) as f:
+    with open(fname, encoding="utf-8") as f:
         for line in f.readlines():
             label, text = line.strip().lower().split("\t", 1)
             data.append((label, text))
     return data
+
+def softmax(x):
+    """
+    Compute the softmax vector.
+    x: a n-dim vector (numpy array)
+    returns: an n-dim vector (numpy array) of softmax values
+    """
+    x = x - x.max()  # numeric stability
+    dominator = np.sum(np.e**x)
+    x = np.exp(x) / dominator
+    return x
 
 root_data_path = os.path.join(os.path.dirname(os.path.abspath((__file__))), 'data')
 train_p = os.path.join(root_data_path, 'train')

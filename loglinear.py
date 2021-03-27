@@ -23,13 +23,14 @@ def classifier_output(x, params):
     """
     W, b = params
     try:
-        np.dot(np.array(x), W) + b
+        out = np.array(x).dot(W) + b
     except ValueError as e:
         print("Error-W")
         print(W)
         print("Error-b")
         print(b)
-    return np.dot(np.array(x), W) + b
+        return
+    return out
 
 
 def predict(x, params):
@@ -60,8 +61,8 @@ def loss_and_gradients(x, y, params):
     y_tag = softmax(classifier_output(x, params))
     loss = cross_entropy(y_tag, y)
     y_ = create_1_hot_vec(y, y_tag)
-    gW = (y_tag - y_) * np.array(x).reshape(-1, 1)
     gb = y_tag - y_
+    gW = gb * np.array(x).reshape(-1, 1)
     return loss, [gW, gb]
 
 

@@ -16,11 +16,9 @@ def feats_to_vec(features):
 
 def accuracy_on_dataset(dataset, params):
     good, bad = 0, 0
-    W, b = params
     for label, features in dataset:
         feature_vec = feats_to_vec(features)
-        pred = np.dot(feature_vec, W) + b
-        y_tag = pred.argmax()
+        y_tag = ll.predict(feature_vec, params)
         if y_tag == L2I[label]:
             good += 1
         else:
