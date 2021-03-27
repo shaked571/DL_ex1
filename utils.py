@@ -13,7 +13,7 @@ root_data_path = os.path.join(os.path.dirname(os.path.abspath((__file__))), 'dat
 train_p = os.path.join(root_data_path, 'train')
 dev_p = os.path.join(root_data_path, 'dev')
 def text_to_bigrams(text):
-    return ["%s%s" % (c1,c2) for c1,c2 in zip(text,text[1:])]
+    return ["%s%s" % (c1, c2) for c1, c2 in zip(text,text[1:])]
 
 TRAIN = [(l,text_to_bigrams(t)) for l,t in read_data(train_p)]
 DEV = [(l,text_to_bigrams(t)) for l,t in read_data(dev_p)]

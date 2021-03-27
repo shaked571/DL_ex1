@@ -1,11 +1,11 @@
-from utils import  vocab, L2I, F2I, TRAIN, DEV
+from utils import vocab, L2I, F2I, TRAIN, DEV
 import loglinear as ll
 import random
 import numpy as np
 from collections import Counter
 
-STUDENT={'name': 'YOUR NAME',
-         'ID': 'YOUR ID NUMBER'}
+STUDENT = {'name': 'YOUR NAME',
+           'ID': 'YOUR ID NUMBER'}
 
 def feats_to_vec(features):
     filtered_feature = Counter([f for f in features if f in vocab])
@@ -55,10 +55,8 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
         print(e_i, train_loss, train_accuracy, dev_accuracy)
     return params
 
+
 if __name__ == '__main__':
-    # YOUR CODE HERE
-    # write code to load the train and dev sets, set up whatever you need,
-    # and call train_classifier.
     train_data = TRAIN
     dev_data = DEV
 
