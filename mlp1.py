@@ -24,7 +24,7 @@ def classifier_output(x, params): # W, b, U, b_tag
     try:
         out1 = np.dot(np.array(x), W) + b
         activation_1 = np.tanh(out1)
-        out2 = np.dot(activation_1, U) +b_tag
+        out2 = np.dot(activation_1, U) + b_tag
     except ValueError as e:
         print("Error-W")
         print(W)
@@ -57,21 +57,19 @@ def loss_and_gradients(x, y, params):
     gU: matrix, gradients of U
     gb_tag: vector, gradients of b_tag
     """
-    W, b, U, b_tag = params
     y_tag = softmax(classifier_output(x, params))
+    W, b, U, b_tag = params
+
     loss = cross_entropy(y_tag, y)
     y_ = create_1_hot_vec(y, y_tag)
 
-    # U*tanh(Wx+b) + b'
-    # z = tanh(Wx+b)
-    # Uz + b'
-    # Wx + b
-    z = np.dot(np.array(x), W) + b
+    z = np.array(x).dot(W) + b
     activation = np.tanh(z)
+
     gb_tag = y_tag - y_
     gU = gb_tag * activation.reshape(-1, 1)
 
-    gb = (1-activation**2)*gb_tag.dot(gU.T)
+    gb = (1 - np.power(activation, 2)) * gb_tag.dot(U.T)
     gW = gb * np.array(x).reshape(-1, 1)
 
     return loss, [gW, gb, gU, gb_tag]
@@ -89,9 +87,14 @@ def create_classifier(in_dim, hid_dim, out_dim):
     returns the parameters (W,b) for a log-linear classifier
     with input dimension in_dim and output dimension out_dim.
     """
-    W = np.zeros((in_dim, hid_dim))
+    # W = np.zeros((in_dim, hid_dim))
+    # b = np.zeros(hid_dim)
+    # U = np.zeros((hid_dim, out_dim))
+    # b_tag = np.zeros(out_dim)
+    W = np.random.randn(in_dim, hid_dim) / np.sqrt(in_dim)
     b = np.zeros(hid_dim)
-    U = np.zeros((hid_dim, out_dim))
+
+    U = np.random.randn(hid_dim, out_dim) / np.sqrt(hid_dim)
     b_tag = np.zeros(out_dim)
     return [W, b, U, b_tag]
 
@@ -128,7 +131,7 @@ if __name__ == '__main__':
     train_data = TRAIN
     dev_data = DEV
 
-    params = create_classifier(len(F2I), 100, len(L2I))
+    params = create_classifier(len(F2I), 1000, len(L2I))
     num_iterations = 100
     learning_rate = 10**-4
     trained_params = train_classifier(train_data, dev_data, num_iterations, learning_rate, params)
