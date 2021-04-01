@@ -45,7 +45,6 @@ def loss_and_gradients(x, y, params):
     gW2: matrix, gradients of W2
     gb2: vector, gradients of b2
     ...
-
     (of course, if we request a linear classifier (ie, params is of length 2),
     you should not have gW2 and gb2.)
     """
@@ -56,18 +55,18 @@ def loss_and_gradients(x, y, params):
 
     all_z = [x]
     all_activation = []
-    for layer in params:
-        all_z.append(np.array(all_z[-1]).dot(layer[0]) + layer[1])
+    for (W, b) in params:
+        all_z.append(np.array(all_z[-1]).dot(W) + b)
         all_activation.append(np.tanh(all_z[-1]))
 
     gb = y_tag - y_
-    gW = gb * all_activation[-1].reshape(-1, 1)
+    gW = gb * all_activation[-2].reshape(-1, 1)
     grads.append([gW, gb])
-
-    for i, layer in enumerate(params[:-1][::-1]):
+    # We start from -2 because for every n layers we have n-1 calculation when we already
+    # calculating the first one before the for loop
+    for i, layer in enumerate(params[:-1][::-2]):
         cur_ind = len(params) - 2 - i
-        # problem with dimensions:
-        gb = (1 - np.power(all_activation[cur_ind + 1], 2)) * grads[-1][1].dot(params[cur_ind+1][0].T)
+        gb = (1 - np.power(all_activation[cur_ind], 2)) * grads[-1][1].dot(params[cur_ind+1][0].T)
         gW = gb * all_z[cur_ind].reshape(-1, 1)
         grads.append([gW, gb])
 
@@ -122,8 +121,8 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
             y = L2I[label]                    # convert the label to number if needed.
             loss, grads = loss_and_gradients(x, y, params)
             cum_loss += loss
-            for i, grad in enumerate(grads):
-                params[i] -= (learning_rate * grad)
+            for i, (gradW, gradb) in enumerate(grads): # need to go from back to the end. a bit wierd, maybe better the otheer way around...
+                params[-1 - i][0] -= (learning_rate * gradW)
 
         train_loss = cum_loss / len(train_data)
         train_accuracy = accuracy_on_dataset(train_data, params)
@@ -136,7 +135,7 @@ if __name__ == '__main__':
     train_data = TRAIN
     dev_data = DEV
 
-    params = create_classifier([600, 500, 400, 300])
+    params = create_classifier([len(F2I), 500, 1000, len(L2I)])
     num_iterations = 100
     learning_rate = 10**-4
     trained_params = train_classifier(train_data, dev_data, num_iterations, learning_rate, params)
