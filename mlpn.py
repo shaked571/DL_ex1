@@ -20,13 +20,11 @@ def accuracy_on_dataset(dataset, params):
 
 
 def classifier_output(x, params):
-    out = None
-    for M, b in zip(params[0::2], params[1::2]):
-        if out is None:
-            out = np.dot(np.array(x), M) + b
-        else:
-            out = np.tanh(out)
-            out = np.dot(out, M) + b
+    out = x
+    for layer in params:
+        M, b = layer
+        out = np.tanh(out)
+        out = np.dot(out, M) + b
     return out
 
 
@@ -56,19 +54,25 @@ def loss_and_gradients(x, y, params):
     loss = cross_entropy(y_tag, y)
     y_ = create_1_hot_vec(y, y_tag)
 
-    # last layer
-    z = np.array(x).dot(params[0][0]) + params[0][1]
-    activation = np.tanh(z)
+    all_z = [x]
+    all_activation = []
+    for layer in params:
+        all_z.append(np.array(all_z[-1]).dot(layer[0]) + layer[1])
+        all_activation.append(np.tanh(all_z[-1]))
 
     gb = y_tag - y_
-    gW = gb * activation.reshape(-1, 1)
+    gW = gb * all_activation[-1].reshape(-1, 1)
     grads.append([gW, gb])
 
-    for layer in params[1:]:
-        gb = (1 - np.power(activation, 2)) * layer[1].dot(layer[0].T)
-        gW = gb * np.array(x).reshape(-1, 1)
+    for i, layer in enumerate(params[:-1][::-1]):
+        cur_ind = len(params) - 2 - i
+        # problem with dimensions:
+        gb = (1 - np.power(all_activation[cur_ind + 1], 2)) * grads[-1][1].dot(params[cur_ind+1][0].T)
+        gW = gb * all_z[cur_ind].reshape(-1, 1)
         grads.append([gW, gb])
-    return None
+
+    return loss, grads
+
 
 def create_classifier(dims):
     """
@@ -132,7 +136,7 @@ if __name__ == '__main__':
     train_data = TRAIN
     dev_data = DEV
 
-    params = create_classifier(len(F2I), 1000, len(L2I))
+    params = create_classifier([600, 500, 400, 300])
     num_iterations = 100
     learning_rate = 10**-4
     trained_params = train_classifier(train_data, dev_data, num_iterations, learning_rate, params)
