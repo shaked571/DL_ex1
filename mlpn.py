@@ -147,7 +147,7 @@ def test_classifier(dataset, params):
     for (_, features) in dataset:
         feature_vec = feats_to_vec(features)
         y_tag = predict(feature_vec, params)
-        result.append(I2L[y_tag])
+        result.append(f"{I2L[y_tag]}\n")
 
     with open('test.pred', 'w') as f:
         f.writelines(result)
@@ -171,4 +171,5 @@ def main_train():
 
 
 if __name__ == '__main__':
-    main_train()
+    # main_train()
+    main_test()
