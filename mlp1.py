@@ -1,6 +1,6 @@
 import numpy as np
 import random
-from utils import create_1_hot_vec, cross_entropy, L2I, F2I, TRAIN, DEV, softmax
+from utils import create_1_hot_vec, cross_entropy, L2I, F2I, TRAIN, DEV, softmax, save_parameters
 from train_loglin import feats_to_vec
 
 STUDENT = {'name1': 'Refael Shaked Greenfeld',
@@ -134,6 +134,8 @@ if __name__ == '__main__':
     # from xor_data import data
     # train_data = data
     # dev_data = data
+    # xor learning rate
+    # learning_rate = 10**-1
 
     train_data = TRAIN
     dev_data = DEV
@@ -141,7 +143,6 @@ if __name__ == '__main__':
     params = create_classifier(len(F2I), 1000, len(L2I))
     num_iterations = 100
     learning_rate = 10**-4
-    # xor learning rate
-    # learning_rate = 10**-1
     trained_params = train_classifier(train_data, dev_data, num_iterations, learning_rate, params)
+    save_parameters(trained_params)
 

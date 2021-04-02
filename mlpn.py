@@ -1,6 +1,6 @@
 import numpy as np
 import random
-from utils import create_1_hot_vec, cross_entropy, L2I, softmax, TRAIN, DEV, F2I,TEST, I2L
+from utils import create_1_hot_vec, cross_entropy, L2I, softmax, TRAIN, DEV, F2I, TEST, I2L, save_parameters
 from train_loglin import feats_to_vec
 import pickle
 
@@ -134,12 +134,6 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
 
         print(e_i, train_loss, train_accuracy, dev_accuracy)
     return params
-
-
-def save_parameters(trained_params):
-    print("Saving params under the name 'params.pkl'")
-    with open("params.pkl", "wb") as f:
-        pickle.dump(trained_params, f)
 
 
 def test_classifier(dataset, params):

@@ -1,4 +1,5 @@
 import os
+import pickle
 from collections import Counter
 import numpy as np
 
@@ -92,3 +93,9 @@ def create_1_hot_vec(y, y_tag):
     y_ = np.zeros(len(y_tag))
     y_[y] = 1
     return y_
+
+
+def save_parameters(trained_params):
+    print("Saving params under the name 'params.pkl'")
+    with open("params.pkl", "wb") as f:
+        pickle.dump(trained_params, f)
