@@ -2,6 +2,7 @@ import numpy as np
 import random
 from utils import create_1_hot_vec, cross_entropy, L2I, softmax, TRAIN, DEV, F2I
 from train_loglin import feats_to_vec
+import pickle
 
 STUDENT={'name': 'YOUR NAME',
          'ID': 'YOUR ID NUMBER'}
@@ -132,6 +133,15 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
     return params
 
 
+def save_parameters(trained_params):
+    with open("params.pkl", "wb") as f:
+        pickle.dump(trained_params, f)
+
+
+def test_classifier():
+    pass
+
+
 if __name__ == '__main__':
     train_data = TRAIN
     dev_data = DEV
@@ -140,3 +150,6 @@ if __name__ == '__main__':
     num_iterations = 100
     learning_rate = 10**-4
     trained_params = train_classifier(train_data, dev_data, num_iterations, learning_rate, params)
+    save_parameters(trained_params)
+    test_classifier(trained_params, )
+

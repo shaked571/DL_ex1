@@ -2,6 +2,7 @@
 # Use it if you want, or ignore it.
 import os
 
+from collections import Counter
 import numpy as np
 
 
@@ -13,6 +14,7 @@ def read_data(fname):
             data.append((label, text))
     return data
 
+
 def softmax(x):
     """
     Compute the softmax vector.
@@ -20,31 +22,41 @@ def softmax(x):
     returns: an n-dim vector (numpy array) of softmax values
     """
     x = x - x.max()  # numeric stability
-    dominator = np.sum(np.e**x)
+    dominator = np.sum(np.e ** x)
     x = np.exp(x) / dominator
     return x
+
 
 root_data_path = os.path.join(os.path.dirname(os.path.abspath((__file__))), 'data')
 train_p = os.path.join(root_data_path, 'train')
 dev_p = os.path.join(root_data_path, 'dev')
+test_p = os.path.join(root_data_path, 'test')
+
+
 def text_to_bigrams(text):
-    return ["%s%s" % (c1, c2) for c1, c2 in zip(text,text[1:])]
+    return ["%s%s" % (c1, c2) for c1, c2 in zip(text, text[1:])]
 
-TRAIN = [(l,text_to_bigrams(t)) for l,t in read_data(train_p)]
-DEV = [(l,text_to_bigrams(t)) for l,t in read_data(dev_p)]
 
-from collections import Counter
+def create_data_set(path):
+    return [(label, text_to_bigrams(t)) for label, t in read_data(path)]
+
+
+TRAIN = create_data_set(train_p)
+DEV = create_data_set(dev_p)
+TEST = create_data_set(test_p)
+
+
 fc = Counter()
-for l,feats in TRAIN:
+for l, feats in TRAIN:
     fc.update(feats)
 
 # 600 most common bigrams in the training set.
-vocab = set([x for x,c in fc.most_common(600)])
+vocab = set([x for x, c in fc.most_common(600)])
 
 # label strings to IDs
-L2I = {l:i for i,l in enumerate(list(sorted(set([l for l,t in TRAIN]))))}
+L2I = {l: i for i, l in enumerate(list(sorted(set([l for l, t in TRAIN]))))}
 # feature strings (bigrams) to IDs
-F2I = {f:i for i,f in enumerate(list(sorted(vocab)))}
+F2I = {f: i for i, f in enumerate(list(sorted(vocab)))}
 
 
 def cross_entropy(y_tag, y):
