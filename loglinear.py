@@ -1,8 +1,8 @@
 import numpy as np
 from utils import create_1_hot_vec, cross_entropy
 
-STUDENT={'name': 'YOUR NAME',
-         'ID': 'YOUR ID NUMBER'}
+STUDENT = {'name': 'YOUR NAME',
+           'ID': 'YOUR ID NUMBER'}
 
 def softmax(x):
     """
