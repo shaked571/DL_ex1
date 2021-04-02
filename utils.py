@@ -70,6 +70,7 @@ vocab = set([x for x, c in fc.most_common(600)])
 
 # label strings to IDs
 L2I = {l: i for i, l in enumerate(list(sorted(set([l for l, t in TRAIN]))))}
+I2L = {i: l for i, l in L2I.items()}
 # feature strings (bigrams) to IDs
 F2I = {f: i for i, f in enumerate(list(sorted(vocab)))}
 

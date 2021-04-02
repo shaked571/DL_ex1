@@ -1,6 +1,6 @@
 import numpy as np
 import random
-from utils import create_1_hot_vec, cross_entropy, L2I, softmax, TRAIN, DEV, F2I,TEST
+from utils import create_1_hot_vec, cross_entropy, L2I, softmax, TRAIN, DEV, F2I,TEST, I2L
 from train_loglin import feats_to_vec
 import pickle
 
@@ -113,7 +113,6 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
     learning_rate: the learning rate to use.
     params: list of parameters (initial values)
     """
-    dev_accuracy = 0
     for e_i in range(num_iterations):
         cum_loss = 0.0  # total loss in this iteration.
         random.shuffle(train_data)
@@ -129,9 +128,6 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
 
         train_loss = cum_loss / len(train_data)
         train_accuracy = accuracy_on_dataset(train_data, params)
-        # if accuracy_on_dataset(dev_data, params) < dev_accuracy:
-        #     print(f"stopped in iteration {e_i}, didn't improve accuracy.")
-        #     break
         dev_accuracy = accuracy_on_dataset(dev_data, params)
 
         print(e_i, train_loss, train_accuracy, dev_accuracy)
@@ -144,8 +140,23 @@ def save_parameters(trained_params):
         pickle.dump(trained_params, f)
 
 
-def test_classifier():
-    pass
+def test_classifier(dataset, params):
+    result = []
+    for (_, features) in dataset:
+        feature_vec = feats_to_vec(features)
+        y_tag = predict(feature_vec, params)
+        result.append(I2L[y_tag])
+
+    with open('test.pred', 'w') as f:
+        f.writelines(result)
+
+def main_test():
+    test_data = TEST
+    with open('params.pkl', 'rb') as f:
+
+
+
+
 
 
 def main_train():
