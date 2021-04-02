@@ -152,11 +152,12 @@ def main_train():
     train_data = TRAIN
     dev_data = DEV
 
-    params = create_classifier([len(F2I), 600, 600, len(L2I)])
-    num_iterations = 5
+    params = create_classifier([len(F2I), 800, 400, len(L2I)])
+    num_iterations = 100
     learning_rate = 10**-4
     trained_params = train_classifier(train_data, dev_data, num_iterations, learning_rate, params)
     save_parameters(trained_params)
+
 
 if __name__ == '__main__':
     main_train()
