@@ -1,7 +1,7 @@
 # This file provides code which you may or may not find helpful.
 # Use it if you want, or ignore it.
 import os
-
+from xor_data import data as data_xor
 from collections import Counter
 import numpy as np
 
@@ -51,14 +51,15 @@ def create_data_set(path, text_to_features):
     return [(label, text_to_features(t)) for label, t in read_data(path)]
 
 
-TRAIN_UNIGRAM = create_data_set(train_p, text_to_unigrams)
-DEV_UNIGRAM = create_data_set(dev_p, text_to_unigrams)
-TEST_UNIGRAM = create_data_set(test_p, text_to_unigrams)
+# unigrams
+# TRAIN = create_data_set(train_p, text_to_unigrams)
+# DEV = create_data_set(dev_p, text_to_unigrams)
+# TEST = create_data_set(test_p, text_to_unigrams)
 
+# bigrams
 TRAIN = create_data_set(train_p, text_to_bigrams)
 DEV = create_data_set(dev_p, text_to_bigrams)
 TEST = create_data_set(test_p, text_to_bigrams)
-
 
 fc = Counter()
 for l, feats in TRAIN:

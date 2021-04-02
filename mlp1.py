@@ -128,11 +128,18 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
 
 
 if __name__ == '__main__':
+    # for xor
+    # from xor_data import data
+    # train_data = data
+    # dev_data = data
+
     train_data = TRAIN
     dev_data = DEV
 
     params = create_classifier(len(F2I), 1000, len(L2I))
     num_iterations = 100
     learning_rate = 10**-4
+    # xor learning rate
+    # learning_rate = 10**-1
     trained_params = train_classifier(train_data, dev_data, num_iterations, learning_rate, params)
 
