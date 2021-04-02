@@ -4,8 +4,10 @@ from utils import create_1_hot_vec, cross_entropy, L2I, softmax, TRAIN, DEV, F2I
 from train_loglin import feats_to_vec
 import pickle
 
-STUDENT={'name': 'YOUR NAME',
-         'ID': 'YOUR ID NUMBER'}
+STUDENT = {'name1': 'Refael Shaked Greenfeld',
+           'ID1': '305030868',
+           'name2': 'Danit Yshaayahu',
+           'ID2': '312434269'}
 
 
 def accuracy_on_dataset(dataset, params):

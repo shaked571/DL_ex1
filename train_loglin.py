@@ -4,8 +4,11 @@ import random
 import numpy as np
 from collections import Counter
 
-STUDENT = {'name': 'YOUR NAME',
-           'ID': 'YOUR ID NUMBER'}
+STUDENT = {'name1': 'Refael Shaked Greenfeld',
+           'ID1': '305030868',
+           'name2': 'Danit Yshaayahu',
+           'ID2': '312434269'}
+
 
 def feats_to_vec(features):
     filtered_feature = Counter([f for f in features if f in vocab])

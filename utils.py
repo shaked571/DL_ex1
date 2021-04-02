@@ -1,9 +1,11 @@
-# This file provides code which you may or may not find helpful.
-# Use it if you want, or ignore it.
 import os
-from xor_data import data as data_xor
 from collections import Counter
 import numpy as np
+
+STUDENT = {'name1': 'Refael Shaked Greenfeld',
+           'ID1': '305030868',
+           'name2': 'Danit Yshaayahu',
+           'ID2': '312434269'}
 
 
 def read_data(fname):
