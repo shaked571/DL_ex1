@@ -155,10 +155,8 @@ def test_classifier(dataset, params):
 def main_test():
     test_data = TEST
     with open('params.pkl', 'rb') as f:
-
-
-
-
+        params = pickle.load(f)
+    test_classifier(test_data, params)
 
 
 def main_train():
