@@ -40,9 +40,9 @@ def text_to_bigrams(text):
 def text_to_unigrams(text):
     unigrams = []
     not_a_letter = {"!", ",", "(", ")", "[", "]", ".", "?", "<", ">", "*", "&", "^", "%", "$", "#", "@", "~", "+", "=",
-                    "{", "}", "\\", "|", "'", ";", "`", " ", "\n", "\t", "\r", '"', ":", "/"}
+                    "{", "}", "\\", "|", "'", ";", "`", " ", "\n", "\t", "\r", '"', ":", "/", "_", "-"}
     for c in text:
-        if c not in not_a_letter and c not in range(10):
+        if c not in not_a_letter and c not in list(range(10)):
             unigrams.append(c)
     return unigrams
 
