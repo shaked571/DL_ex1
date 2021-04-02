@@ -37,13 +37,27 @@ def text_to_bigrams(text):
     return ["%s%s" % (c1, c2) for c1, c2 in zip(text, text[1:])]
 
 
-def create_data_set(path):
-    return [(label, text_to_bigrams(t)) for label, t in read_data(path)]
+def text_to_unigrams(text):
+    unigrams = []
+    not_a_letter = {"!", ",", "(", ")", "[", "]", ".", "?", "<", ">", "*", "&", "^", "%", "$", "#", "@", "~", "+", "=",
+                    "{", "}", "\\", "|", "'", ";", "`", " ", "\n", "\t", "\r", '"', ":", "/"}
+    for c in text:
+        if c not in not_a_letter and c not in range(10):
+            unigrams.append(c)
+    return unigrams
 
 
-TRAIN = create_data_set(train_p)
-DEV = create_data_set(dev_p)
-TEST = create_data_set(test_p)
+def create_data_set(path, text_to_features):
+    return [(label, text_to_features(t)) for label, t in read_data(path)]
+
+
+TRAIN_UNIGRAM = create_data_set(train_p, text_to_unigrams)
+DEV_UNIGRAM = create_data_set(dev_p, text_to_unigrams)
+TEST_UNIGRAM = create_data_set(test_p, text_to_unigrams)
+
+TRAIN = create_data_set(train_p, text_to_bigrams)
+DEV = create_data_set(dev_p, text_to_bigrams)
+TEST = create_data_set(test_p, text_to_bigrams)
 
 
 fc = Counter()
