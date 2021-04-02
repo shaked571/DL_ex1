@@ -163,7 +163,7 @@ def main_train():
     train_data = TRAIN
     dev_data = DEV
 
-    params = create_classifier([len(F2I), 800, 400, len(L2I)])
+    params = create_classifier([len(F2I), 800, 400, 200, 50,  len(L2I)])
     num_iterations = 100
     learning_rate = 10**-4
     trained_params = train_classifier(train_data, dev_data, num_iterations, learning_rate, params)
