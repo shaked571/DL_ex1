@@ -129,9 +129,9 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
 
         train_loss = cum_loss / len(train_data)
         train_accuracy = accuracy_on_dataset(train_data, params)
-        if accuracy_on_dataset(dev_data, params) < dev_accuracy:
-            print(f"stopped in iteration {e_i}, didn't improve accuracy.")
-            break
+        # if accuracy_on_dataset(dev_data, params) < dev_accuracy:
+        #     print(f"stopped in iteration {e_i}, didn't improve accuracy.")
+        #     break
         dev_accuracy = accuracy_on_dataset(dev_data, params)
 
         print(e_i, train_loss, train_accuracy, dev_accuracy)
