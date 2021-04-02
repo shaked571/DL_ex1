@@ -123,6 +123,7 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
             cum_loss += loss
             for i, (gradW, gradb) in enumerate(grads): # need to go from back to the end. a bit wierd, maybe better the otheer way around...
                 params[-1 - i][0] -= (learning_rate * gradW)
+                params[-1 - i][1] -= (learning_rate * gradb)
 
         train_loss = cum_loss / len(train_data)
         train_accuracy = accuracy_on_dataset(train_data, params)
